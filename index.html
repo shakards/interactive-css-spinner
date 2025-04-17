@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <title>Advanced CSS Loader | Professional Web Development</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* CSS Variables */
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --success: #4cc9f0;
+      --dark: #2b2d42;
+      --light: #f8f9fa;
+      --text: #333;
+      --border: #dee2e6;
+      --card-bg: #fff;
+      --section-bg: #f8f9fa;
+    }
+
+    /* Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--light);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+      flex: 1;
+    }
+
+    /* Fluid Typography */
+    h1, h2, h3, h4 {
+      color: var(--dark);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      border-radius: 2px;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h3 {
+      font-size: clamp(1.25rem, 3vw, 1.5rem);
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    p {
+      margin: 1rem 0;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      color: #555;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    a:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+
+    /* Header - Responsive Navigation */
+    header {
+      background-color: var(--dark);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .logo {
+      font-size: clamp(1.25rem, 4vw, 1.5rem);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-links a {
+      color: white;
+      font-weight: 500;
+      padding: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: var(--success);
+      text-decoration: none;
+    }
+
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Loader Demo Section */
+    .loader-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      height: auto;
+      padding: 2rem 1rem;
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loader-demo::before {
+      content: 'Live Preview';
+      position: absolute;
+      top: 0;
+      right: 0;
+      background-color: var(--primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      border-radius: 0 0 0 4px;
+    }
+
+    /* Responsive Loader Styles */
+    .loader {
+      --R: min(30px, 10vw); /* Responsive size */
+      --g1: #514b82 96%, #0000;
+      --g2: #eeeeee 96%, #0000;
+      width: calc(2 * var(--R));
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      -webkit-mask: linear-gradient(#000 0 0);
+      animation: l30 2s infinite linear;
+      will-change: transform;
+    }
+
+    .loader::before,
+    .loader::after {
+      content: "";
+      grid-area: 1/1;
+      width: 50%;
+      background:
+        radial-gradient(farthest-side, var(--g1)) calc(var(--R) + 0.866 * var(--R) - var(--R)) calc(var(--R) - 0.5 * var(--R) - var(--R)),
+        radial-gradient(farthest-side, var(--g1)) calc(var(--R) + 0.866 * var(--R) - var(--R)) calc(var(--R) - 0.5 * var(--R) - var(--R)),
+        radial-gradient(farthest-side, var(--g2)) calc(var(--R) + 0.5 * var(--R) - var(--R)) calc(var(--R) - 0.866 * var(--R) - var(--R)),
+        radial-gradient(farthest-side, var(--g1)) 0 calc(-1 * var(--R)),
+        radial-gradient(farthest-side, var(--g2)) calc(var(--R) - 0.5 * var(--R) - var(--R)) calc(var(--R) - 0.866 * var(--R) - var(--R)),
+        radial-gradient(farthest-side, var(--g1)) calc(var(--R) - 0.866 * var(--R) - var(--R)) calc(var(--R) - 0.5 * var(--R) - var(--R)),
+        radial-gradient(farthest-side, var(--g2)) calc(-1 * var(--R)) 0,
+        radial-gradient(farthest-side, var(--g1)) calc(var(--R) - 0.866 * var(--R) - var(--R)) calc(var(--R) + 0.5 * var(--R) - var(--R));
+      background-size: calc(2 * var(--R)) calc(2 * var(--R));
+      background-repeat: no-repeat;
+    }
+
+    .loader::after {
+      transform: rotate(180deg);
+      transform-origin: right;
+    }
+
+    @keyframes l30 {
+      100% { transform: rotate(-1turn); }
+    }
+
+    /* Customization Controls - Responsive Grid */
+    .customize-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem;
+    }
+
+    .control-group label {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    .control-group label i {
+      color: var(--primary);
+    }
+
+    input[type="range"], input[type="color"] {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background-color: var(--light);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 44px; /* Better touch target */
+    }
+
+    input[type="range"]:hover, input[type="color"]:hover {
+      border-color: var(--primary);
+    }
+
+    /* Code Block Styling */
+    .code-container {
+      position: relative;
+      background-color: #282c34;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1e2227;
+      padding: 0.75rem 1rem;
+      color: #abb2bf;
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .copy-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 36px;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .copy-btn.copied {
+      background-color: var(--success);
+    }
+
+    pre {
+      margin: 0;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      line-height: 1.5;
+    }
+
+    /* Syntax highlighting */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #5c6370;
+      font-style: italic;
+    }
+
+    .token.punctuation {
+      color: #abb2bf;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.boolean,
+    .token.number,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #d19a66;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #98c379;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #56b6c2;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #c678dd;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #61afef;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #e06c75;
+    }
+
+    /* Notes & Tips */
+    .note {
+      background-color: #e7f5ff;
+      border-left: 4px solid var(--primary);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .note h3 {
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--dark);
+    }
+
+    .note i {
+      color: var(--primary);
+    }
+
+    .note.performance {
+      background-color: #e3f2fd;
+      border-left-color: #2196f3;
+    }
+
+    .note.performance i {
+      color: #2196f3;
+    }
+
+    .note.best-practices {
+      background-color: #e8f5e9;
+      border-left-color: #4caf50;
+    }
+
+    .note.best-practices i {
+      color: #4caf50;
+    }
+
+    .note.warning {
+      background-color: #fff3e0;
+      border-left-color: #ff9800;
+    }
+
+    .note.warning i {
+      color: #ff9800;
+    }
+
+    /* Browser Compatibility */
+    .compatibility {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+
+    .browser {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    .browser.supported {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .browser.partial {
+      background-color: #fff8e1;
+      color: #ff8f00;
+    }
+
+    /* Usage Examples - Responsive Grid */
+    .usage-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .example {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .example:hover {
+      transform: translateY(-5px);
+    }
+
+    .example-header {
+      background-color: var(--dark);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .example-content {
+      padding: 1.25rem;
+    }
+
+    /* Footer - Responsive Layout */
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 2rem 0 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .footer-column h3 {
+      color: white;
+      margin-bottom: 1rem;
+      font-size: clamp(1.1rem, 3vw, 1.25rem);
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-column h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+      color: #adb5bd;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    .footer-links a:hover {
+      color: white;
+      text-decoration: none;
+      transform: translateX(5px);
+    }
+
+    .footer-links a i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background-color: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background-color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: #adb5bd;
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+    }
+
+    /* Responsive Design - Breakpoints */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .header-content {
+        flex-direction: row;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: var(--dark);
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+        gap: 0;
+        transform: translateY(-150%);
+        transition: transform 0.3s ease;
+        z-index: 100;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+      }
+
+      .nav-links a {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+      }
+
+      .mobile-menu-toggle {
+        display: block;
+      }
+
+      .loader-demo {
+        min-height: 180px;
+        padding: 1.5rem 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 0.75rem;
+      }
+
+      h1 {
+        margin-bottom: 1rem;
+      }
+
+      .customize-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .usage-examples {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+
+    /* Utility Classes */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.25rem;
+      background-color: var(--primary);
+      color: white;
+      border-radius: 4px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      gap: 0.5rem;
+      text-decoration: none;
+      min-height: 44px;
+    }
+
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-code"></i>
+        <span>CSS Loader Demo</span>
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-info-circle"></i> About</a>
+        <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="fade-in">Advanced CSS Loader Tutorial</h1>
+    <p class="note fade-in delay-1">
+      <strong><i class="fas fa-lightbulb"></i> Professional Tip:</strong> This CSS loader demonstrates modern techniques using CSS variables, 
+      radial gradients, and hardware-accelerated animations - perfect for production applications.
+    </p>
+
+    <!-- Live Demo -->
+    <section class="fade-in delay-1">
+      <h2><i class="fas fa-play-circle"></i> Live Demo</h2>
+      <div class="loader-demo card">
+        <div class="loader" id="demoLoader"></div>
+        <p class="demo-text" style="margin-top: 1rem;">Loading content...</p>
+      </div>
+    </section>
+
+    <!-- Customization -->
+    <section class="fade-in delay-2">
+      <h2><i class="fas fa-sliders-h"></i> Customization</h2>
+      <div class="customize-controls">
+        <div class="control-group card">
+          <label for="sizeControl"><i class="fas fa-arrows-alt"></i> Size</label>
+          <input type="range" id="sizeControl" min="20" max="120" value="60" oninput="updateLoader()">
+          <div class="range-value" id="sizeValue">60px</div>
+        </div>
+        
+        <div class="control-group card">
+          <label for="speedControl"><i class="fas fa-tachometer-alt"></i> Speed</label>
+          <input type="range" id="speedControl" min="0.5" max="3" value="1" step="0.1" oninput="updateLoader()">
+          <div class="range-value" id="speedValue">1x</div>
+        </div>
+        
+        <div class="control-group card">
+          <label for="color1Control"><i class="fas fa-palette"></i> Primary Color</label>
+          <input type="color" id="color1Control" value="#514b82" oninput="updateLoader()">
+        </div>
+        
+        <div class="control-group card">
+          <label for="color2Control"><i class="fas fa-palette"></i> Secondary Color</label>
+          <input type="color" id="color2Control" value="#eeeeee" oninput="updateLoader()">
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation -->
+    <section class="fade-in delay-2">
+      <h2><i class="fas fa-code"></i> Implementation Details</h2>
+      <div class="card">
+        <p>This loader uses cutting-edge CSS techniques for optimal performance and flexibility:</p>
+        
+        <div class="note performance">
+          <h3><i class="fas fa-tachometer-alt"></i> Why This Approach?</h3>
+          <ul>
+            <li><strong>CSS Variables</strong> enable real-time customization without JavaScript</li>
+            <li><strong>Radial Gradients</strong> create complex shapes with pure CSS</li>
+            <li><strong>Hardware Acceleration</strong> via <code>will-change: transform</code> ensures smooth animation</li>
+            <li><strong>Small footprint</strong> (under 2KB) with no external dependencies</li>
+          </ul>
+        </div>
+
+        <h3><i class="fas fa-cogs"></i> Technical Breakdown</h3>
+        <ol>
+          <li>
+            <strong>CSS Variables</strong>: The loader uses <code>--R</code> (radius), <code>--g1</code>, and <code>--g2</code> 
+            for dynamic control of size and colors.
+          </li>
+          <li>
+            <strong>Advanced Gradients</strong>: Eight <code>radial-gradient</code> backgrounds are precisely positioned 
+            using trigonometric calculations.
+          </li>
+          <li>
+            <strong>Animation</strong>: The <code>@keyframes</code> rotation is optimized with <code>will-change</code> 
+            and runs on the GPU.
+          </li>
+          <li>
+            <strong>Modern Layout</strong>: CSS Grid handles the base layout, with pseudo-elements (<code>::before</code>, 
+            <code>::after</code>) creating the complex pattern.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Performance -->
+    <section class="fade-in delay-3">
+      <div class="note performance">
+        <h3><i class="fas fa-rocket"></i> Performance Optimization</h3>
+        <ul>
+          <li><strong>GPU Acceleration:</strong> Uses <code>transform</code> and <code>will-change</code> for silky smooth animation</li>
+          <li><strong>Efficient Painting:</strong> The <code>-webkit-mask</code> property minimizes repaints</li>
+          <li><strong>Lightweight:</strong> No JavaScript required for core functionality</li>
+          <li><strong>Adaptive:</strong> CSS variables allow customization without performance overhead</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Complete Code -->
+    <section class="fade-in delay-3">
+      <h2><i class="fas fa-file-code"></i> Complete Implementation</h2>
+      <div class="card">
+        <p>Copy-paste ready code for your projects:</p>
+        <div class="code-container">
+          <div class="code-header">
+            <span>loader.html</span>
+            <button class="copy-btn" onclick="copyCode(this)">
+              <i class="far fa-copy"></i> Copy Code
+            </button>
+          </div>
+          <pre><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!DOCTYPE html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>CSS Loader<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span><span class="token punctuation">&gt;</span></span>
+        <span class="token selector">.loader</span> <span class="token punctuation">{</span>
+            <span class="token property">--R</span><span class="token punctuation">:</span> 30px<span class="token punctuation">;</span>
+            <span class="token property">--g1</span><span class="token punctuation">:</span> <span class="token hexcode">#514b82</span> 96%<span class="token punctuation">,</span> <span class="token hexcode">#0000</span><span class="token punctuation">;</span>
+            <span class="token property">--g2</span><span class="token punctuation">:</span> <span class="token hexcode">#eeeeee</span> 96%<span class="token punctuation">,</span> <span class="token hexcode">#0000</span><span class="token punctuation">;</span>
+            <span class="token property">width</span><span class="token punctuation">:</span> <span class="token function">calc</span><span class="token punctuation">(</span>2*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token property">aspect-ratio</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+            <span class="token property">border-radius</span><span class="token punctuation">:</span> 50%<span class="token punctuation">;</span>
+            <span class="token property">display</span><span class="token punctuation">:</span> grid<span class="token punctuation">;</span>
+            <span class="token property">-webkit-mask</span><span class="token punctuation">:</span> <span class="token function">linear-gradient</span><span class="token punctuation">(</span><span class="token hexcode">#000</span> 0 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token property">animation</span><span class="token punctuation">:</span> l30 2s infinite linear<span class="token punctuation">;</span>
+            <span class="token property">will-change</span><span class="token punctuation">:</span> transform<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        
+        <span class="token selector">.loader::before</span>,
+        <span class="token selector">.loader::after</span> <span class="token punctuation">{</span>
+            <span class="token property">content</span><span class="token punctuation">:</span> <span class="token string">""</span><span class="token punctuation">;</span>
+            <span class="token property">grid-area</span><span class="token punctuation">:</span> 1/1<span class="token punctuation">;</span>
+            <span class="token property">width</span><span class="token punctuation">:</span> 50%<span class="token punctuation">;</span>
+            <span class="token property">background</span><span class="token punctuation">:</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g1<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> + 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g1<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> + 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g2<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> + 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g1<span class="token punctuation">)</span><span class="token punctuation">)</span> 0 <span class="token function">calc</span><span class="token punctuation">(</span>-1*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g2<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g1<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g2<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span>-1*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> 0<span class="token punctuation">,</span>
+                <span class="token function">radial-gradient</span><span class="token punctuation">(</span>farthest-side<span class="token punctuation">,</span><span class="token function">var</span><span class="token punctuation">(</span>--g1<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - 0.866*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span><span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> + 0.5*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span> - <span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token property">background-size</span><span class="token punctuation">:</span> <span class="token function">calc</span><span class="token punctuation">(</span>2*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token function">calc</span><span class="token punctuation">(</span>2*<span class="token function">var</span><span class="token punctuation">(</span>--R<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token property">background-repeat</span><span class="token punctuation">:</span> no-repeat<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        
+        <span class="token selector">.loader::after</span> <span class="token punctuation">{</span>
+            <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span>180deg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token property">transform-origin</span><span class="token punctuation">:</span> right<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        
+        <span class="token atrule"><span class="token rule">@keyframes</span> l30</span> <span class="token punctuation">{</span>
+            <span class="token selector">100%</span> <span class="token punctuation">{</span> <span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">rotate</span><span class="token punctuation">(</span>-1turn<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>loader<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></code></pre>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Best Practices -->
+    <section class="fade-in delay-3">
+      <div class="note best-practices">
+        <h3><i class="fas fa-check-double"></i> Best Practices</h3>
+        <ul>
+          <li><strong>Use for short operations (1-5s)</strong> - Combine with skeleton screens for longer loads</li>
+          <li><strong>Accessibility matters</strong> - Add <code>aria-busy="true"</code> and <code>aria-live="polite"</code></li>
+          <li><strong>Color contrast</strong> should meet WCAG 2.1 AA standards</li>
+          <li><strong>Provide fallback</strong> for older browsers with <code>@supports</code> queries</li>
+          <li><strong>Performance budget</strong> - Keep animation under 10ms per frame</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Usage Examples -->
+    <section class="fade-in delay-3">
+      <h2><i class="fas fa-laptop-code"></i> Usage Examples</h2>
+      <div class="usage-examples">
+        <div class="example">
+          <div class="example-header">
+            <i class="fab fa-react"></i>
+            <h3>React Component</h3>
+          </div>
+          <div class="example-content">
+            <div class="code-container">
+              <div class="code-header">
+                <span>Loader.jsx</span>
+                <button class="copy-btn" onclick="copyCode(this)">
+                  <i class="far fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code><span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">'react'</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token string">'./Loader.css'</span><span class="token punctuation">;</span>
+
+<span class="token keyword">const</span> <span class="token function-variable function">Loader</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> size<span class="token punctuation">,</span> speed <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> 
+      <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>loader<span class="token punctuation">"</span></span>
+      <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span>
+        <span class="token string">'--R'</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>size<span class="token operator">/</span><span class="token number">2</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px`</span></span><span class="token punctuation">,</span>
+        <span class="token string">'animationDuration'</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token number">2</span><span class="token operator">/</span>speed<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">s`</span></span>
+      <span class="token punctuation">}</span><span class="token punctuation">}</span></span>
+      <span class="token attr-name">aria-busy</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+      <span class="token attr-name">aria-live</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>polite<span class="token punctuation">"</span></span>
+    <span class="token punctuation">></span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sr-only<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Loading...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> Loader<span class="token punctuation">;</span></code></pre>
+            </div>
+          </div>
+        </div>
+        
+        <div class="example">
+          <div class="example-header">
+            <i class="fab fa-vuejs"></i>
+            <h3>Vue Component</h3>
+          </div>
+          <div class="example-content">
+            <div class="code-container">
+              <div class="code-header">
+                <span>Loader.vue</span>
+                <button class="copy-btn" onclick="copyCode(this)">
+                  <i class="far fa-copy"></i> Copy
+                </button>
+              </div>
+              <pre><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+    <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>loader<span class="token punctuation">"</span></span>
+    <span class="token attr-name">:style</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>loaderStyle<span class="token punctuation">"</span></span>
+    <span class="token attr-name">aria-busy</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+    <span class="token attr-name">aria-live</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>polite<span class="token punctuation">"</span></span>
+  <span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sr-only<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Loading...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span>
+<span class="token script"><span class="token language-javascript">
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">props</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">size</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
+      <span class="token keyword">default</span><span class="token operator">:</span> <span class="token number">60</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">speed</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token literal-property property">type</span><span class="token operator">:</span> Number<span class="token punctuation">,</span>
+      <span class="token keyword">default</span><span class="token operator">:</span> <span class="token number">1</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token function">computed</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">loaderStyle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token string">'--R'</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token operator">/</span><span class="token number">2</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">px`</span></span><span class="token punctuation">,</span>
+        <span class="token string">'animationDuration'</span><span class="token operator">:</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span><span class="token number">2</span><span class="token operator">/</span><span class="token keyword">this</span><span class="token punctuation">.</span>speed<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">s`</span></span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>style</span> <span class="token attr-name">scoped</span><span class="token punctuation">&gt;</span></span>
+@import './Loader.css';
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>style</span><span class="token punctuation">&gt;</span></span></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Browser Compatibility -->
+    <section class="fade-in delay-3">
+      <h2><i class="fas fa-globe"></i> Browser Compatibility</h2>
+      <div class="card">
+        <p>This loader works in all modern browsers with some considerations for older versions:</p>
+        
+        <div class="compatibility">
+          <div class="browser supported">
+            <i class="fab fa-chrome"></i>
+            <span>Chrome 58+</span>
+          </div>
+          <div class="browser supported">
+            <i class="fab fa-firefox"></i>
+            <span>Firefox 52+</span>
+          </div>
+          <div class="browser supported">
+            <i class="fab fa-safari"></i>
+            <span>Safari 12.1+</span>
+          </div>
+          <div class="browser supported">
+            <i class="fab fa-edge"></i>
+            <span>Edge 16+</span>
+          </div>
+          <div class="browser partial">
+            <i class="fab fa-internet-explorer"></i>
+            <span>IE 11 (partial)</span>
+          </div>
+        </div>
+
+        <div class="note warning">
+          <h3><i class="fas fa-exclamation-triangle"></i> Fallback Strategy</h3>
+          <p>For older browsers, use <code>@supports</code> queries to provide a simpler loader:</p>
+          <pre><code><span class="token atrule"><span class="token rule">@supports</span> not (aspect-ratio: 1)</span> <span class="token punctuation">{</span>
+  <span class="token selector">.loader</span> <span class="token punctuation">{</span>
+    <span class="token property">width</span><span class="token punctuation">:</span> 60px<span class="token punctuation">;</span>
+    <span class="token property">height</span><span class="token punctuation">:</span> 60px<span class="token punctuation">;</span>
+    <span class="token comment">/* Simplified loader styles */</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>CSS Loader Demo</h3>
+        <p>A demonstration of advanced CSS loading animation techniques.</p>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> About</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>&copy; 2025 CSS Loader Demo. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Copy code functionality
+    function copyCode(button) {
+      const codeContainer = button.closest('.code-container');
+      const codeElement = codeContainer.querySelector('code');
+      const range = document.createRange();
+      range.selectNode(codeElement);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+      
+      const originalText = button.innerHTML;
+      button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      button.classList.add('copied');
+      
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('copied');
+      }, 2000);
+    }
+
+    // Loader customization
+    function updateLoader() {
+      const size = document.getElementById('sizeControl').value;
+      const speed = document.getElementById('speedControl').value;
+      const color1 = document.getElementById('color1Control').value;
+      const color2 = document.getElementById('color2Control').value;
+      
+      document.getElementById('sizeValue').textContent = `${size}px`;
+      document.getElementById('speedValue').textContent = `${speed}x`;
+      
+      const loader = document.getElementById('demoLoader');
+      loader.style.setProperty('--R', `${size/2}px`);
+      loader.style.setProperty('--g1', `${color1} 96%, #0000`);
+      loader.style.setProperty('--g2', `${color2} 96%, #0000`);
+      loader.style.animationDuration = `${2/speed}s`;
+    }
+
+    // Mobile menu toggle
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (mobileMenuToggle && navLinks) {
+      mobileMenuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        mobileMenuToggle.innerHTML = navLinks.classList.contains('active') 
+          ? '<i class="fas fa-times"></i>' 
+          : '<i class="fas fa-bars"></i>';
+      });
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLoader();
+      
+      // Animate cards on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fade-in');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.card, .note').forEach(el => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>
